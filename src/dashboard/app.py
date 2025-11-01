@@ -1,5 +1,6 @@
 """Flask web dashboard for chat review and manual control"""
 
+import logging
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -8,6 +9,10 @@ from pathlib import Path
 from src.config import Config
 from src.storage.database import ChatDatabase
 from src.ai.chat_style import ChatStyle
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
@@ -71,9 +76,10 @@ def get_conversations():
             'conversations': conversations
         })
     except Exception as e:
+        logger.error(f"Error getting conversations: {e}", exc_info=True)
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'Failed to retrieve conversations'
         }), 500
 
 
@@ -89,9 +95,10 @@ def get_conversation(contact):
             'messages': messages
         })
     except Exception as e:
+        logger.error(f"Error getting conversation for {contact}: {e}", exc_info=True)
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'Failed to retrieve conversation'
         }), 500
 
 
@@ -106,9 +113,10 @@ def get_contacts():
             'contacts': contacts
         })
     except Exception as e:
+        logger.error(f"Error getting contacts: {e}", exc_info=True)
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'Failed to retrieve contacts'
         }), 500
 
 
@@ -122,9 +130,10 @@ def get_style():
             'style': chat_style.style_data
         })
     except Exception as e:
+        logger.error(f"Error getting style: {e}", exc_info=True)
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'Failed to retrieve chat style'
         }), 500
 
 
@@ -141,9 +150,10 @@ def update_style():
             'message': 'Style updated successfully'
         })
     except Exception as e:
+        logger.error(f"Error updating style: {e}", exc_info=True)
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'Failed to update chat style'
         }), 500
 
 
@@ -169,9 +179,10 @@ def add_example():
             'message': 'Example added successfully'
         })
     except Exception as e:
+        logger.error(f"Error adding example: {e}", exc_info=True)
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'Failed to add example conversation'
         }), 500
 
 
