@@ -237,9 +237,9 @@
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('chats')">Chats</div>
-        <div class="tab" onclick="switchTab('style')">Chat Style</div>
-        <div class="tab" onclick="switchTab('config')">Configuration</div>
+        <div class="tab active" onclick="switchTab('chats', event)">Chats</div>
+        <div class="tab" onclick="switchTab('style', event)">Chat Style</div>
+        <div class="tab" onclick="switchTab('config', event)">Configuration</div>
     </div>
 
     <div id="chats-tab" class="tab-content active">
@@ -313,11 +313,13 @@
         loadStyle();
         loadConfig();
 
-        function switchTab(tabName) {
+        function switchTab(tabName, event) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
             document.getElementById(tabName + '-tab').classList.add('active');
         }
 
@@ -349,7 +351,7 @@
                 const lastMsg = messages[messages.length - 1];
                 
                 return `
-                    <div class="contact-item" onclick="selectContact('${contact}')">
+                    <div class="contact-item" onclick="selectContact('${contact}', event)">
                         <div class="contact-name">${contact}</div>
                         <div class="contact-last-msg">${lastMsg ? lastMsg.message : 'No messages'}</div>
                     </div>
@@ -357,13 +359,15 @@
             }).join('');
         }
 
-        async function selectContact(contact) {
+        async function selectContact(contact, event) {
             currentContact = contact;
             
             document.querySelectorAll('.contact-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.closest('.contact-item').classList.add('active');
+            if (event && event.target) {
+                event.target.closest('.contact-item').classList.add('active');
+            }
             
             try {
                 const response = await fetch(`/api/conversation/${contact}`);
