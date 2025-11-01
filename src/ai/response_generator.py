@@ -20,7 +20,6 @@ class ResponseGenerator:
         self.provider = Config.AI_PROVIDER
         
         if self.provider == "openai":
-            openai.api_key = Config.OPENAI_API_KEY
             self.client = openai.OpenAI(api_key=Config.OPENAI_API_KEY)
         elif self.provider == "cohere":
             self.client = cohere.Client(Config.COHERE_API_KEY)

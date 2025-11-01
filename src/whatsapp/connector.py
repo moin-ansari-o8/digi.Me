@@ -32,7 +32,11 @@ class WhatsAppConnector:
         chrome_options = Options()
         
         # User data directory to save session
-        chrome_options.add_argument("--user-data-dir=/tmp/whatsapp-session")
+        # Use a more secure location than /tmp
+        from pathlib import Path
+        session_dir = Path.home() / ".digi-me" / "whatsapp-session"
+        session_dir.mkdir(parents=True, exist_ok=True)
+        chrome_options.add_argument(f"--user-data-dir={session_dir}")
         
         if self.headless:
             chrome_options.add_argument("--headless")

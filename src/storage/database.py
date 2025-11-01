@@ -227,7 +227,7 @@ class ChatDatabase:
         session = self.Session()
         try:
             contacts = session.query(ApprovedContact)\
-                .filter(ApprovedContact.is_active == True)\
+                .filter(ApprovedContact.is_active.is_(True))\
                 .all()
             
             return [
@@ -256,7 +256,7 @@ class ChatDatabase:
         try:
             contact = session.query(ApprovedContact)\
                 .filter(ApprovedContact.phone_number == phone_number)\
-                .filter(ApprovedContact.is_active == True)\
+                .filter(ApprovedContact.is_active.is_(True))\
                 .first()
             
             return contact is not None
